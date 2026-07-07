@@ -250,32 +250,50 @@
   .cs-credit a { color: var(--amber); text-decoration: none; }
   .cs-credit a:hover { text-decoration: underline; }
 
-  /* ── EMOTION PANEL (SCAFFOLD) ─────────────────────────────── */
-  #emotionPanel {
-    position: fixed;
-    top: 103px;
-    right: 0;
-    width: 272px;
-    height: calc(100vh - 103px);
-    background: white;
-    border-left: 1.5px solid rgba(44,26,14,0.1);
-    box-shadow: -4px 0 20px rgba(44,26,14,0.09);
-    z-index: 100;
-    display: flex;
+  /* ── MONSTER READER LAB (inside the page tile) ────────────── */
+  #readerLab {
+    display: none;
     flex-direction: column;
-    padding: 20px 18px;
-    gap: 16px;
-    transform: translateX(100%);
-    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
-    visibility: hidden;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 20px 52px 20px 24px;
+    flex: 1;
+    min-width: 0;
+    border-left: 1.5px solid rgba(44,26,14,0.07);
   }
 
-  #emotionPanel.open {
-    transform: translateX(0);
-    visibility: visible;
+  body.lab-open #readerLab { display: flex; }
+
+  body.lab-open #readerLab .page-text { width: 100%; }
+
+  /* One wide landscape tile: book page + lab side by side */
+  body.lab-open .reader-wrap { max-width: 1280px; }
+
+  body.lab-open .page-container {
+    max-width: none;
+    display: flex;
+    align-items: stretch;
+    /* Left gutter keeps the prev arrow off the artwork */
+    padding-left: 56px;
   }
 
-  .ep-title {
+  body.lab-open .page-inner {
+    flex: 0 0 auto;
+    width: 55%;
+  }
+
+  @media (max-width: 899px) {
+    body.lab-open .page-container { flex-direction: column; padding-left: 0; }
+    body.lab-open .page-inner { width: 100%; }
+    #readerLab {
+      border-left: none;
+      border-top: 1.5px solid rgba(44,26,14,0.07);
+      padding: 20px;
+    }
+  }
+
+  .rl-title {
     font-family: 'Fredoka One', cursive;
     font-size: 16px;
     color: var(--ink);
@@ -284,94 +302,66 @@
     gap: 8px;
   }
 
-  .ep-badge {
-    font-family: 'Nunito', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    background: var(--purple-light);
-    color: var(--purple);
-    padding: 2px 9px;
-    border-radius: 10px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+  .rl-char-card {
+    background: var(--warm);
+    border-radius: 12px;
+    padding: 24px 18px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex: 0 0 auto;
+    width: 100%;
   }
 
-  /* TODO: replace with <video id="webcamFeed"> when implementing face-api.js */
-  .ep-camera {
+  .rl-char-wrap {
+    width: 100%;
+    max-width: 440px;
+    position: relative;
+    transform-origin: center bottom;
+  }
+
+  .rl-char-wrap img {
+    width: 100%;
+    display: block;
+  }
+
+  #rlImgOpen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+  }
+
+  .rl-char-name {
+    font-family: 'Fredoka One', cursive;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .rl-placeholder {
     width: 100%;
     aspect-ratio: 4/3;
     background: var(--warm);
     border-radius: 12px;
     border: 2px dashed rgba(44,26,14,0.18);
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    text-align: center;
+    padding: 16px;
     color: var(--ink-light);
     font-size: 13px;
     font-weight: 600;
   }
 
-  .ep-camera svg { opacity: 0.35; }
-
-  /* TODO: populate with live emotion scores from face-api.js */
-  .ep-results {
-    flex: 1;
-    background: var(--cream);
-    border-radius: 10px;
-    padding: 14px 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .ep-results-lbl {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--ink-light);
-    text-transform: uppercase;
-    letter-spacing: 0.09em;
-  }
-
-  .ep-bar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    opacity: 0.3;
-  }
-
-  .ep-bar-name {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--ink);
-    width: 62px;
-    flex-shrink: 0;
-  }
-
-  .ep-bar-track {
-    flex: 1;
-    height: 5px;
-    background: rgba(44,26,14,0.1);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-
-  .ep-bar-fill {
-    height: 100%;
-    border-radius: 3px;
-    background: var(--green);
-    width: 0%;
-    transition: width 0.3s;
-  }
-
-  .ep-note {
+  .rl-note {
     font-size: 11px;
     color: var(--ink-light);
     line-height: 1.55;
     border-top: 1px solid rgba(44,26,14,0.08);
     padding-top: 10px;
-    /* TODO: remove or update when face-api.js is integrated */
   }
 
   /* ── HEADER ───────────────────────────────────────────────── */
@@ -437,6 +427,7 @@
     max-width: 860px;
     margin: 0 auto;
     width: 100%;
+    transition: max-width 0.3s cubic-bezier(0.4,0,0.2,1), margin 0.3s cubic-bezier(0.4,0,0.2,1);
   }
 
   .book-meta { text-align: center; }
@@ -483,7 +474,7 @@
 
   .page-img-wrap {
     width: 100%;
-    aspect-ratio: 4/3;
+    aspect-ratio: 1/1;
     background: var(--warm);
     position: relative;
     overflow: hidden;
@@ -576,6 +567,15 @@
     white-space: pre-wrap;
   }
 
+  /* Read-along: the word being spoken lights up orange */
+  .page-text .w.current {
+    background: var(--amber);
+    color: white;
+    border-radius: 4px;
+    padding: 0 3px;
+    margin: 0 -3px;
+  }
+
   .page-inner {
     transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.2s;
   }
@@ -584,7 +584,37 @@
   .page-inner.flip-in  { transform: rotateY(8deg)  scale(0.97); opacity: 0; }
 
   /* ── AUDIO PLAYER ────────────────────────────────────────── */
+  .player-row {
+    width: 100%;
+    max-width: 660px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .reader-lab-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--amber);
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: var(--page-shadow);
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .reader-lab-btn:hover  { background: #D97706; }
+  .reader-lab-btn:active { transform: scale(0.95); }
+  .reader-lab-btn.active { background: var(--ink); }
+
   .audio-player {
+    flex: 1;
+    min-width: 0;
     width: 100%;
     max-width: 600px;
     background: white;
@@ -801,6 +831,64 @@
 
   footer a { color: var(--black); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
+
+  /* ── KINDLE / 16:9 LANDSCAPE ─────────────────────────────────
+     Fit the whole reading experience on one screen: the square
+     artwork is sized from the viewport height so nothing scrolls,
+     and the Reader Lab character centers beside it. */
+  @media (orientation: landscape) and (min-width: 700px) {
+    .reader-wrap  { padding: 12px 16px 8px; gap: 10px; }
+    .book-meta h1 { font-size: 19px; }
+    .book-meta p  { font-size: 12px; }
+
+    /* Lab closed: landscape tile filling toward the bottom bar,
+       artwork centered with side gutters for the page-turn arrows */
+    body:not(.lab-open) .page-container {
+      width: min(100%, max(680px, calc(100vh - 332px)));
+      max-width: none;
+    }
+
+    body:not(.lab-open) .page-inner {
+      width: clamp(280px, calc(100vh - 460px), 700px);
+      margin: 0 auto;
+    }
+
+    /* Square page sized by height so the wide tile never scrolls;
+       the book page dominates and the lab is a narrow column */
+    body.lab-open .page-container {
+      width: fit-content;
+      margin: 0 auto;
+    }
+
+    body.lab-open .page-inner {
+      width: clamp(260px, calc(100vh - 348px), 720px);
+    }
+
+    /* Lab column matches the square page height; the text under the
+       character fills the leftover space and scrolls inside it */
+    body.lab-open #readerLab {
+      height: clamp(260px, calc(100vh - 348px), 720px);
+    }
+
+    body.lab-open #readerLab .page-text {
+      flex: 1;
+      min-height: 0;
+      max-height: none;
+    }
+
+    #readerLab {
+      flex: 0 0 auto;
+      width: 338px;
+      justify-content: flex-start;
+    }
+
+    .page-text   { min-height: 56px; max-height: 88px; }
+    .page-text p { font-size: 14px; }
+
+    footer { display: none; }
+
+    .rl-char-wrap { max-width: min(440px, calc(100vh - 430px)); }
+  }
 
   /* ── RESPONSIVE ──────────────────────────────────────────── */
   @media (max-width: 500px) {
@@ -1107,40 +1195,6 @@
   </div>
 </div>
 
-<!-- ── EMOTION DETECTION PANEL (SCAFFOLD) ────────────────────────
-     face-api.js integration point.
-     TODO: add CDN script, load models, stream webcam, run detect loop.
-     ─────────────────────────────────────────────────────────────── -->
-<div id="emotionPanel" role="complementary" aria-label="Emotion Detector" aria-hidden="true">
-  <div class="ep-title">
-    Emotion Detector
-    <span class="ep-badge">Coming Soon</span>
-  </div>
-
-  <!-- TODO: swap for <video id="webcamFeed" autoplay muted playsinline> -->
-  <div class="ep-camera" aria-hidden="true">
-    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-      <path d="M6 14a3 3 0 0 1 3-3h3l2-3h12l2 3h3a3 3 0 0 1 3 3v16a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V14z" stroke="#6B4226" stroke-width="2"/>
-      <circle cx="20" cy="22" r="5" stroke="#6B4226" stroke-width="2"/>
-    </svg>
-    Camera preview
-  </div>
-
-  <!-- TODO: update .ep-bar-fill widths with live emotion scores -->
-  <div class="ep-results">
-    <div class="ep-results-lbl">Detected Emotions</div>
-    <div class="ep-bar"><span class="ep-bar-name">Happy</span><div class="ep-bar-track"><div class="ep-bar-fill"></div></div></div>
-    <div class="ep-bar"><span class="ep-bar-name">Surprised</span><div class="ep-bar-track"><div class="ep-bar-fill"></div></div></div>
-    <div class="ep-bar"><span class="ep-bar-name">Neutral</span><div class="ep-bar-track"><div class="ep-bar-fill"></div></div></div>
-    <div class="ep-bar"><span class="ep-bar-name">Sad</span><div class="ep-bar-track"><div class="ep-bar-fill"></div></div></div>
-    <div class="ep-bar"><span class="ep-bar-name">Angry</span><div class="ep-bar-track"><div class="ep-bar-fill"></div></div></div>
-  </div>
-
-  <div class="ep-note">
-    Webcam access required. Emotion data stays on-device and is never uploaded.
-  </div>
-</div>
-
 <!-- ── BOOK SELECTION SCREEN ─────────────────────────────────── -->
 <div id="bookSelection">
 
@@ -1182,19 +1236,6 @@
     <img src="monster wares banner.png" alt="Monster Wares" style="height:83px; width:auto; display:block; padding:10px 0;">
   </div>
   <div class="header-right">
-
-    <!-- Emotion toggle (scaffold — TODO: activate when face-api.js is live) -->
-    <button class="hdr-btn" id="emotionToggleBtn"
-            onclick="toggleEmotionPanel()"
-            title="Emotion Detector (coming soon)"
-            aria-pressed="false">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.7"/>
-        <circle cx="6.5" cy="8" r="1" fill="currentColor"/>
-        <circle cx="11.5" cy="8" r="1" fill="currentColor"/>
-        <path d="M6 11.5s.9 1.5 3 1.5 3-1.5 3-1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-    </button>
 
     <!-- Fullscreen toggle (keyboard: F) -->
     <button class="hdr-btn" id="fullscreenBtn"
@@ -1242,8 +1283,28 @@
         <p id="pageText"></p>
       </div>
     </div>
+
+    <!-- ── MONSTER READER LAB (in-tile) ──────────────────────
+         The monster reads along with the page narration.
+         Lip-sync engine tuned in the Monster Mouth Lab. -->
+    <div id="readerLab" role="complementary" aria-label="Monster Reader Lab" aria-hidden="true">
+      <div class="rl-title">Monster Reader Lab</div>
+
+      <div class="rl-char-card" id="rlCharCard">
+        <div class="rl-char-wrap" id="rlCharWrap">
+          <img id="rlImgClosed" src="" alt="">
+          <img id="rlImgOpen" src="" alt="">
+        </div>
+        <div class="rl-char-name" id="rlCharName"></div>
+      </div>
+
+      <div class="rl-placeholder" id="rlPlaceholder" style="display:none;">
+        This monster's read-along character is coming soon!
+      </div>
+    </div>
   </div>
 
+  <div class="player-row">
   <div class="audio-player">
     <div class="audio-row">
       <button class="play-btn" id="playBtn" onclick="togglePlay()">
@@ -1277,6 +1338,20 @@
         </label>
       </div>
     </div>
+  </div>
+
+  <!-- Monster Reader Lab toggle -->
+  <button class="reader-lab-btn" id="readerToggleBtn"
+          onclick="toggleReaderPanel()"
+          title="Monster Reader Lab"
+          aria-pressed="false">
+    <svg width="22" height="22" viewBox="0 0 18 18" fill="none">
+      <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.7"/>
+      <circle cx="6.5" cy="8" r="1" fill="currentColor"/>
+      <circle cx="11.5" cy="8" r="1" fill="currentColor"/>
+      <path d="M6 11.5s.9 1.5 3 1.5 3-1.5 3-1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </button>
   </div>
 
   <div class="bottom-nav">
@@ -1476,7 +1551,7 @@ let current          = 0;
 let autoplay         = true;
 let autoPlayAudio    = false;
 let visited          = new Set([0]);
-let emotionPanelOpen = false;
+let readerPanelOpen  = false;
 let featuredIndex    = 0;
 
 // ── DOM ───────────────────────────────────────────────────────
@@ -1567,21 +1642,284 @@ function syncFullscreenBtn() {
 document.addEventListener('fullscreenchange',       syncFullscreenBtn);
 document.addEventListener('webkitfullscreenchange', syncFullscreenBtn);
 
-// ── EMOTION PANEL (SCAFFOLD) ──────────────────────────────────
-// TODO: When integrating face-api.js —
-//   1. Load CDN: <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js">
-//   2. Load models: await faceapi.nets.tinyFaceDetector.loadFromUri('/models')
-//   3. Start webcam into <video id="webcamFeed">
-//   4. Run detection loop; update .ep-bar-fill widths with live scores
-function toggleEmotionPanel() {
-  emotionPanelOpen = !emotionPanelOpen;
-  const panel = document.getElementById('emotionPanel');
-  const btn   = document.getElementById('emotionToggleBtn');
-  panel.classList.toggle('open', emotionPanelOpen);
-  panel.setAttribute('aria-hidden', String(!emotionPanelOpen));
-  btn.classList.toggle('active', emotionPanelOpen);
-  btn.setAttribute('aria-pressed', String(emotionPanelOpen));
+// ── MONSTER READER LAB ────────────────────────────────────────
+// Lip-sync engine ported from the Monster Mouth Lab tuning tool.
+function toggleReaderPanel() {
+  readerPanelOpen = !readerPanelOpen;
+  const btn = document.getElementById('readerToggleBtn');
+  document.getElementById('readerLab')
+    .setAttribute('aria-hidden', String(!readerPanelOpen));
+  btn.classList.toggle('active', readerPanelOpen);
+  btn.setAttribute('aria-pressed', String(readerPanelOpen));
+  document.body.classList.toggle('lab-open', readerPanelOpen);
+
+  // Lab open: the page text lives under the character.
+  // Lab closed: it goes back under the book page.
+  const textWrap = document.querySelector('.page-text');
+  if (readerPanelOpen) {
+    document.getElementById('readerLab').appendChild(textWrap);
+  } else {
+    document.getElementById('pageInner').appendChild(textWrap);
+  }
+  updatePageTextScroll();
 }
+
+// Read-along characters (only books with mouth art)
+const CHARACTERS = {
+  'ornery-ox':    { name: 'Ornery Ox',    closed: 'characters/ornery-ox-closed.png',    open: 'characters/ornery-ox-open.png'    },
+  'rob-rage':     { name: 'Rob Rage',     closed: 'characters/rob-rage-closed.png',     open: 'characters/rob-rage-open.png'     },
+  'goofy-goblin': { name: 'Goofy Goblin', closed: 'characters/green-goblin-closed.png', open: 'characters/green-goblin-open.png' }
+};
+
+// Settings tuned in the Monster Mouth Lab
+const LOW_CUT          = 5;
+const RISE_RATE        = 0.88;
+const DECAY_RATE       = 1;
+const CLOSE_DELAY_MS   = 60;
+const SCALE_MAX        = 1.14;
+const MOUTH_OPEN_SCALE = 1.05;
+const SCALE_MIN        = 1.0;
+
+let currentBookId = 'ornery-ox';
+let peakMax       = 20;
+let currentScale  = 1.0;
+let mouthIsOpen   = false;
+let closeTimeout  = null;
+let lipAnalyser   = null;
+let lipData       = null;
+let lipInterval   = null;
+
+function setupReaderCharacter(bookId) {
+  currentBookId = bookId;
+  resetMouth();
+  const char = CHARACTERS[bookId];
+  const card = document.getElementById('rlCharCard');
+  const ph   = document.getElementById('rlPlaceholder');
+  if (char) {
+    document.getElementById('rlImgClosed').src = char.closed;
+    document.getElementById('rlImgOpen').src   = char.open;
+    document.getElementById('rlImgClosed').alt = char.name + ' closed mouth';
+    document.getElementById('rlImgOpen').alt   = char.name + ' open mouth';
+    document.getElementById('rlCharName').textContent = char.name;
+    card.style.display = '';
+    ph.style.display   = 'none';
+    if (!readerPanelOpen) toggleReaderPanel();
+  } else {
+    card.style.display = 'none';
+    ph.style.display   = '';
+  }
+}
+
+function startLipAnalyser() {
+  if (lipAnalyser) return;
+  if (location.protocol === 'file:') {
+    // Connecting the audio element to Web Audio on file:// silences it
+    // (CORS taint). Skip the analyser so narration still plays; the
+    // mouth only animates when served over http(s).
+    console.warn('file:// protocol: lip-sync disabled so audio can play. Serve over HTTP for the mouth animation.');
+    lipAnalyser = { getByteTimeDomainData: () => {} };
+    lipData = new Uint8Array(1024);
+    return;
+  }
+  try {
+    const ctx    = getAudioCtx();
+    const source = ctx.createMediaElementSource(audioEl);
+    lipAnalyser  = ctx.createAnalyser();
+    lipAnalyser.fftSize = 1024;
+    lipAnalyser.smoothingTimeConstant = 0;
+    lipData = new Uint8Array(lipAnalyser.fftSize);
+    source.connect(lipAnalyser);
+    lipAnalyser.connect(ctx.destination);
+  } catch (err) {
+    // Audio still plays without the analyser; mouth just won't move.
+    lipAnalyser = { getByteTimeDomainData: () => {} };
+    lipData = new Uint8Array(1024);
+  }
+}
+
+function resetMouth() {
+  clearInterval(lipInterval);
+  lipInterval  = null;
+  currentScale = 1.0;
+  mouthIsOpen  = false;
+  if (closeTimeout) { clearTimeout(closeTimeout); closeTimeout = null; }
+  document.getElementById('rlCharWrap').style.transform = 'scale(1)';
+  document.getElementById('rlImgClosed').style.opacity  = '1';
+  document.getElementById('rlImgOpen').style.opacity    = '0';
+}
+
+audioEl.addEventListener('play', () => {
+  if (!CHARACTERS[currentBookId]) return;
+  startLipAnalyser();
+  clearInterval(lipInterval);
+  lipInterval = setInterval(() => {
+    lipAnalyser.getByteTimeDomainData(lipData);
+    let peak = 0;
+    for (let i = 0; i < lipData.length; i++) {
+      const s = Math.abs(lipData[i] - 128);
+      if (s > peak) peak = s;
+    }
+
+    if (peak > peakMax) peakMax = peak;
+    peakMax = Math.max(20, peakMax * 0.9998);
+    const effectivePeak = peak < LOW_CUT ? 0 : peak;
+    const normalized = Math.max(0, Math.min(1, effectivePeak / peakMax));
+    const targetScale = SCALE_MIN + (normalized * (SCALE_MAX - SCALE_MIN));
+
+    if (targetScale > currentScale) {
+      currentScale += (targetScale - currentScale) * RISE_RATE;
+    } else {
+      currentScale += (targetScale - currentScale) * DECAY_RATE;
+    }
+
+    document.getElementById('rlCharWrap').style.transform =
+      'scale(' + currentScale.toFixed(4) + ')';
+
+    if (currentScale >= MOUTH_OPEN_SCALE) {
+      if (closeTimeout) { clearTimeout(closeTimeout); closeTimeout = null; }
+      if (!mouthIsOpen) {
+        mouthIsOpen = true;
+        document.getElementById('rlImgClosed').style.opacity = '0';
+        document.getElementById('rlImgOpen').style.opacity   = '1';
+      }
+    } else if (mouthIsOpen && !closeTimeout) {
+      closeTimeout = setTimeout(() => {
+        mouthIsOpen  = false;
+        closeTimeout = null;
+        document.getElementById('rlImgClosed').style.opacity = '1';
+        document.getElementById('rlImgOpen').style.opacity   = '0';
+      }, CLOSE_DELAY_MS);
+    }
+  }, 1000 / 60);
+});
+
+audioEl.addEventListener('pause', resetMouth);
+audioEl.addEventListener('ended', resetMouth);
+
+// ── READ-ALONG WORD HIGHLIGHTING ──────────────────────────────
+// Words are wrapped in spans; timing is estimated by spreading the
+// words across the audio duration, weighted by word length.
+let wordSpans   = [];
+let wordEnds    = [];
+let lastWordIdx = -1;
+
+function renderPageText(text) {
+  const p = document.getElementById('pageText');
+  p.innerHTML = '';
+  wordSpans   = [];
+  wordEnds    = [];
+  lastWordIdx = -1;
+  const weights = [];
+  let total = 0;
+  text.split(/(\s+)/).forEach(tok => {
+    if (!tok) return;
+    if (/^\s+$/.test(tok)) {
+      p.appendChild(document.createTextNode(tok));
+    } else {
+      const span = document.createElement('span');
+      span.className = 'w';
+      span.textContent = tok;
+      p.appendChild(span);
+      wordSpans.push(span);
+      const w = tok.length + 2;
+      weights.push(w);
+      total += w;
+    }
+  });
+  let acc = 0;
+  weights.forEach((w, i) => { acc += w; wordEnds[i] = acc / total; });
+}
+
+// Words are mapped across the *spoken* part of the recording, not the
+// whole file: each page's audio is decoded once to find where speech
+// starts and ends, so leading/trailing silence no longer slows the
+// highlight down. A small lead keeps it feeling in step with the voice.
+const HIGHLIGHT_LEAD = 0.15;
+
+let speechBounds    = null;
+let speechBoundsSrc = '';
+
+function analyzeSpeechBounds(src) {
+  speechBounds    = null;
+  speechBoundsSrc = src;
+  if (location.protocol === 'file:') return;
+  fetch(src)
+    .then(r => r.arrayBuffer())
+    .then(buf => getAudioCtx().decodeAudioData(buf))
+    .then(audio => {
+      if (speechBoundsSrc !== src) return; // page changed meanwhile
+      const data   = audio.getChannelData(0);
+      const sr     = audio.sampleRate;
+      const win    = Math.floor(sr * 0.02);   // 20ms windows
+      const thresh = 0.02;                    // ≈ -34 dB speech gate
+      let start = 0;
+      let end   = audio.duration;
+      for (let i = 0; i < data.length; i += win) {
+        let m = 0;
+        const stop = Math.min(i + win, data.length);
+        for (let j = i; j < stop; j++) { const a = Math.abs(data[j]); if (a > m) m = a; }
+        if (m > thresh) { start = i / sr; break; }
+      }
+      for (let i = data.length - win; i >= 0; i -= win) {
+        let m = 0;
+        const stop = Math.min(i + win, data.length);
+        for (let j = i; j < stop; j++) { const a = Math.abs(data[j]); if (a > m) m = a; }
+        if (m > thresh) { end = Math.min(audio.duration, (i + win) / sr); break; }
+      }
+      if (end - start > 0.5) speechBounds = { start, end };
+    })
+    .catch(() => { /* fall back to full-duration mapping */ });
+}
+
+function updateWordHighlight() {
+  if (!wordSpans.length || !audioEl.duration || audioEl.paused) return;
+  const start = speechBounds ? speechBounds.start : 0;
+  const end   = speechBounds ? speechBounds.end   : audioEl.duration;
+  const t     = audioEl.currentTime + HIGHLIGHT_LEAD;
+  if (t < start) { clearWordHighlight(); return; }
+  const progress = Math.min(0.999, Math.max(0, (t - start) / (end - start)));
+  let idx = wordEnds.findIndex(e => progress < e);
+  if (idx === -1) idx = wordSpans.length - 1;
+  if (idx === lastWordIdx) return;
+  if (lastWordIdx >= 0 && wordSpans[lastWordIdx]) {
+    wordSpans[lastWordIdx].classList.remove('current');
+  }
+  const span = wordSpans[idx];
+  span.classList.add('current');
+  lastWordIdx = idx;
+
+  // Keep the spoken word in view inside the scrollable text box
+  const wrap = document.querySelector('.page-text');
+  if (wrap.scrollHeight > wrap.clientHeight) {
+    const spanTop = span.getBoundingClientRect().top
+      - wrap.getBoundingClientRect().top + wrap.scrollTop;
+    wrap.scrollTop = Math.max(0, spanTop - wrap.clientHeight / 2);
+  }
+}
+
+function clearWordHighlight() {
+  if (lastWordIdx >= 0 && wordSpans[lastWordIdx]) {
+    wordSpans[lastWordIdx].classList.remove('current');
+  }
+  lastWordIdx = -1;
+}
+
+audioEl.addEventListener('ended', clearWordHighlight);
+
+// 60fps highlight loop while playing (timeupdate alone only fires ~4x/s)
+let highlightRaf = null;
+
+function highlightLoop() {
+  updateWordHighlight();
+  highlightRaf = requestAnimationFrame(highlightLoop);
+}
+
+audioEl.addEventListener('play', () => {
+  cancelAnimationFrame(highlightRaf);
+  highlightLoop();
+});
+audioEl.addEventListener('pause', () => cancelAnimationFrame(highlightRaf));
+audioEl.addEventListener('ended', () => cancelAnimationFrame(highlightRaf));
 
 // ── HELPERS ───────────────────────────────────────────────────
 function pad(n) { return String(n + 1).padStart(2, '0'); }
@@ -1612,7 +1950,7 @@ function loadPage(idx, direction) {
     placeholder.classList.remove('hidden');
     img.src = BASE + 'page-' + activePageFiles[idx] + '.png';
 
-    document.getElementById('pageText').textContent      = activePages[idx].text;
+    renderPageText(activePages[idx].text);
     updatePageTextScroll();
     document.getElementById('pageBadge').textContent     = 'Page ' + (idx + 1) + ' of ' + TOTAL;
     document.getElementById('audioTitle').textContent    = 'Page ' + (idx + 1) + ' narration';
@@ -1624,6 +1962,7 @@ function loadPage(idx, direction) {
 
     audioEl.pause();
     audioEl.src = BASE + 'page-' + activePageFiles[idx] + '.mp3';
+    analyzeSpeechBounds(audioEl.src);
     if (autoPlayAudio) {
       audioEl.play().then(() => {
         document.getElementById('audioStatus').textContent = 'Playing...';
@@ -1686,6 +2025,7 @@ audioEl.addEventListener('timeupdate', () => {
   scrubber.value = pct;
   scrubber.style.setProperty('--pct', pct.toFixed(1) + '%');
   document.getElementById('audioTime').textContent = fmt(audioEl.currentTime) + ' / ' + fmt(audioEl.duration);
+  updateWordHighlight();
 });
 
 audioEl.addEventListener('ended', () => {
@@ -1772,6 +2112,7 @@ function showSelectionScreen() {
   updateFeatured(featuredIndex);
   audioEl.pause();
   audioEl.src = '';
+  if (readerPanelOpen) toggleReaderPanel();
   document.getElementById('bookSelection').style.display = 'flex';
   document.querySelector('header').style.display         = 'none';
   document.querySelector('.reader-wrap').style.display   = 'none';
@@ -1794,6 +2135,7 @@ function openBook(bookId) {
   document.querySelector('header').style.display         = '';
   document.querySelector('.reader-wrap').style.display   = '';
   document.querySelector('footer').style.display         = '';
+  setupReaderCharacter(bookId);
   visited = new Set([0]);
   renderDots();
   loadPage(0, 1);
