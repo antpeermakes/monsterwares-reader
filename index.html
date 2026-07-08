@@ -586,31 +586,12 @@
   /* ── AUDIO PLAYER ────────────────────────────────────────── */
   .player-row {
     width: 100%;
-    max-width: 660px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .reader-lab-btn {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: var(--amber);
-    border: none;
-    color: white;
-    cursor: pointer;
+    max-width: 600px;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-    box-shadow: var(--page-shadow);
-    transition: background 0.2s, transform 0.1s;
+    gap: 12px;
   }
-
-  .reader-lab-btn:hover  { background: #D97706; }
-  .reader-lab-btn:active { transform: scale(0.95); }
-  .reader-lab-btn.active { background: var(--ink); }
 
   .audio-player {
     flex: 1;
@@ -893,12 +874,100 @@
   /* ── RESPONSIVE ──────────────────────────────────────────── */
   @media (max-width: 500px) {
     .book-meta h1  { font-size: 20px; }
-    .page-text     { max-height: 120px; }
-    .page-text p   { font-size: 15px; }
-    .nav-btn       { padding: 0 14px; font-size: 13px; }
-    .play-btn      { width: 42px; height: 42px; }
     .cover-title   { font-size: 32px; }
     .back-link span { display: none; }
+
+    header { height: 56px; }
+    header .logo img { height: 41.5px !important; padding: 0 !important; }
+
+    /* Title sits closer to the header; slimmer side margins give the
+       larger book page below more room to grow into */
+    .reader-wrap { padding: 5px 8px 20px; }
+
+    /* Book page 30% bigger than its previous shrunk size */
+    .page-container { width: 100%; }
+
+    /* Play menu 30% shorter: tighter padding/gaps throughout */
+    .audio-player  { padding: 5px 12px; gap: 4px; }
+    .audio-row     { gap: 10px; }
+    .audio-bottom  { gap: 4px; }
+    .toggles-group { gap: 8px; }
+
+    /* Green play button 20% smaller than its already-shrunk size */
+    .play-btn     { width: 27px; height: 27px; }
+    .play-btn svg { width: 14px; height: 14px; }
+
+    /* Orange scrubber handle 20% smaller (volume thumb untouched) */
+    #scrubber::-webkit-slider-thumb { width: 13px; height: 13px; }
+    #scrubber::-moz-range-thumb     { width: 13px; height: 13px; }
+
+    /* Previous/Next 50% shorter so all page-number dots fit
+       underneath the play menu with less scrolling */
+    .nav-btn {
+      height: 22px;
+      padding: 0 7px;
+      font-size: 11px;
+      gap: 3px;
+    }
+    .nav-btn svg { width: 10px; height: 10px; }
+
+    /* Read-along text: tight single-line-height spacing, ~2 lines
+       visible, full container width, so the scroll box stays short */
+    /* Matches the character card's natural height, so the text
+       panel fills the same vertical space the character occupies */
+    .page-text {
+      min-height: 0;
+      height: 120px;
+      max-height: 120px;
+      padding: 8px 12px;
+    }
+    .page-text p {
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    /* Landscape block: character on the left, text filling the row
+       out to the container's right edge — full container width
+       instead of a narrow centered column, so the block is short
+       (wide, not tall) and there's no wasted margin on either side */
+    #readerLab {
+      width: 100%;
+      align-self: center;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: 8px 12px;
+      gap: 10px;
+    }
+
+    .rl-title { display: none; }
+
+    .rl-char-card {
+      flex: 0 0 auto;
+      width: auto;
+      padding: 4px;
+      gap: 2px;
+    }
+
+    .rl-char-name { font-size: 11px; }
+
+    /* Overrides the higher-specificity base rule that forces the
+       text to 100% of its parent — here it should share the row
+       with the character instead of spanning full width alone */
+    body.lab-open #readerLab .page-text {
+      flex: 1;
+      width: auto;
+      min-width: 0;
+      border: 1.5px solid rgba(44,26,14,0.12);
+      border-radius: 10px;
+      align-items: flex-start;
+    }
+
+    /* Character figure 30% bigger than its previous fitted size */
+    .rl-char-wrap {
+      width: 153px;
+      max-width: 153px;
+    }
   }
 
   @media (max-width: 360px) {
@@ -1287,8 +1356,8 @@
     <!-- ── MONSTER READER LAB (in-tile) ──────────────────────
          The monster reads along with the page narration.
          Lip-sync engine tuned in the Monster Mouth Lab. -->
-    <div id="readerLab" role="complementary" aria-label="Monster Reader Lab" aria-hidden="true">
-      <div class="rl-title">Monster Reader Lab</div>
+    <div id="readerLab" role="complementary" aria-label="Monster Reader" aria-hidden="true">
+      <div class="rl-title">Monster Reader</div>
 
       <div class="rl-char-card" id="rlCharCard">
         <div class="rl-char-wrap" id="rlCharWrap">
@@ -1336,22 +1405,15 @@
           <button class="toggle-pill on" id="autoplayToggle" onclick="toggleAutoplay()"></button>
           Auto-advance on finish
         </label>
+        <label class="autoplay-toggle">
+          <button class="toggle-pill" id="readerToggleBtn"
+                  onclick="toggleReaderPanel()"
+                  aria-pressed="false"></button>
+          Monster Reader
+        </label>
       </div>
     </div>
   </div>
-
-  <!-- Monster Reader Lab toggle -->
-  <button class="reader-lab-btn" id="readerToggleBtn"
-          onclick="toggleReaderPanel()"
-          title="Monster Reader Lab"
-          aria-pressed="false">
-    <svg width="22" height="22" viewBox="0 0 18 18" fill="none">
-      <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.7"/>
-      <circle cx="6.5" cy="8" r="1" fill="currentColor"/>
-      <circle cx="11.5" cy="8" r="1" fill="currentColor"/>
-      <path d="M6 11.5s.9 1.5 3 1.5 3-1.5 3-1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    </svg>
-  </button>
   </div>
 
   <div class="bottom-nav">
@@ -1649,7 +1711,7 @@ function toggleReaderPanel() {
   const btn = document.getElementById('readerToggleBtn');
   document.getElementById('readerLab')
     .setAttribute('aria-hidden', String(!readerPanelOpen));
-  btn.classList.toggle('active', readerPanelOpen);
+  btn.classList.toggle('on', readerPanelOpen);
   btn.setAttribute('aria-pressed', String(readerPanelOpen));
   document.body.classList.toggle('lab-open', readerPanelOpen);
 
@@ -1668,7 +1730,11 @@ function toggleReaderPanel() {
 const CHARACTERS = {
   'ornery-ox':    { name: 'Ornery Ox',    closed: 'characters/ornery-ox-closed.png',    open: 'characters/ornery-ox-open.png'    },
   'rob-rage':     { name: 'Rob Rage',     closed: 'characters/rob-rage-closed.png',     open: 'characters/rob-rage-open.png'     },
-  'goofy-goblin': { name: 'Goofy Goblin', closed: 'characters/green-goblin-closed.png', open: 'characters/green-goblin-open.png' }
+  'goofy-goblin': { name: 'Goofy Goblin', closed: 'characters/green-goblin-closed.png', open: 'characters/green-goblin-open.png' },
+  'yucky-yarvin': { name: 'Yucky Yarvin', closed: 'characters/yellow-yarvin-closed.png', open: 'characters/yellow-yarvin-open.png' },
+  'violent-vicky': { name: 'Violent Vicky', closed: 'characters/violet-vicky-closed.png', open: 'characters/violet-vicky-open.png' },
+  'boo-hoo-bob':   { name: 'Boo-Hoo Bob',   closed: 'characters/boohoo-bob-closed.png',   open: 'characters/boohoo-bob-open.png'   },
+  'panic-pat':     { name: 'Panic Pat',     closed: 'characters/pink-pat-closed.png',     open: 'characters/pink-pat-open.png'     }
 };
 
 // Settings tuned in the Monster Mouth Lab
