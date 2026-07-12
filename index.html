@@ -896,20 +896,25 @@
 
   /* ── RESPONSIVE ──────────────────────────────────────────── */
   @media (max-width: 500px) {
-    .book-meta h1  { font-size: 20px; }
+    .book-meta h1  { font-size: 18px; }
     .cover-title   { font-size: 32px; }
     .back-link span { display: none; }
+
+    /* Subtitle and footer credit removed on mobile so the book and
+       character can pull up and the whole UI fits one screen */
+    .book-meta p { display: none; }
+    footer       { display: none; }
 
     header { height: 56px; }
     header .logo img { height: 41.5px !important; padding: 0 !important; }
 
-    /* Title sits closer to the header; slimmer side margins give the
-       larger book page below more room to grow into; tighter gap so
-       the play menu and page-nav card can sit flush against each other */
-    .reader-wrap { padding: 5px 8px 8px; gap: 8px; }
+    /* Everything sits tight so the full reading experience fits on a
+       single phone screen without scrolling */
+    .reader-wrap { padding: 4px 8px 6px; gap: 6px; }
 
-    /* Book page 30% bigger than its previous shrunk size */
-    .page-container { width: 100%; }
+    /* Book-reading segment scaled down: narrower container shrinks the
+       book image and the character row together */
+    .page-container { width: 64%; }
 
     /* Play menu 30% shorter: tighter padding/gaps throughout */
     .audio-player  { padding: 5px 12px; gap: 4px; }
@@ -1011,13 +1016,13 @@
        panel fills the same vertical space the character occupies */
     .page-text {
       min-height: 0;
-      height: 120px;
-      max-height: 120px;
-      padding: 8px 12px;
+      height: 92px;
+      max-height: 92px;
+      padding: 6px 10px;
     }
     .page-text p {
-      font-size: 14px;
-      line-height: 1.25;
+      font-size: 13px;
+      line-height: 1.22;
     }
 
     /* Landscape block: character on the left, text filling the row
@@ -1057,10 +1062,10 @@
       align-items: flex-start;
     }
 
-    /* Character figure 30% bigger than its previous fitted size */
+    /* Character scaled down to match the smaller book segment */
     .rl-char-wrap {
-      width: 153px;
-      max-width: 153px;
+      width: 112px;
+      max-width: 112px;
     }
   }
 
